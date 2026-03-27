@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>Wallet</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://telegram.org/js/telegram-web-app.js"></script>
+</head>
+<body>
+    <div class="wallet-container">
+        <div class="header">
+            <div class="header-left">
+                <span class="wallet-title">Wallet</span>
+            </div>
+            <div class="header-right">
+                <div class="header-icon">⚙️</div>
+            </div>
+        </div>
+
+        <div class="balance-card">
+            <div class="balance-label">Общий баланс</div>
+            <div class="balance-amount">
+                <span class="currency">$</span>
+                <span class="amount" id="totalBalance">1,000.00</span>
+            </div>
+            <div class="balance-change positive">+$12.34 (1.25%) ↑</div>
+        </div>
+
+        <div class="action-buttons">
+            <div class="action-btn">
+                <div class="action-icon">↑</div>
+                <span>Отправить</span>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">↓</div>
+                <span>Получить</span>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">💳</div>
+                <span>Купить</span>
+            </div>
+            <div class="action-btn">
+                <div class="action-icon">🔄</div>
+                <span>Обмен</span>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <span>Активы</span>
+            <span class="see-all">Все →</span>
+        </div>
+
+        <div class="assets-list">
+            <div class="asset-item">
+                <div class="asset-icon usdt">
+                    <span>₮</span>
+                </div>
+                <div class="asset-info">
+                    <div class="asset-name">Tether</div>
+                    <div class="asset-ticker">USDT</div>
+                </div>
+                <div class="asset-value">
+                    <div class="asset-amount">$1,000.00</div>
+                    <div class="asset-quantity">1,000 USDT</div>
+                </div>
+            </div>
+
+            <div class="asset-item">
+                <div class="asset-icon ton">
+                    <span>💎</span>
+                </div>
+                <div class="asset-info">
+                    <div class="asset-name">Toncoin</div>
+                    <div class="asset-ticker">TON</div>
+                </div>
+                <div class="asset-value">
+                    <div class="asset-amount">$0.00</div>
+                    <div class="asset-quantity">0 TON</div>
+                </div>
+            </div>
+
+            <div class="asset-item">
+                <div class="asset-icon btc">
+                    <span>₿</span>
+                </div>
+                <div class="asset-info">
+                    <div class="asset-name">Bitcoin</div>
+                    <div class="asset-ticker">BTC</div>
+                </div>
+                <div class="asset-value">
+                    <div class="asset-amount">$0.00</div>
+                    <div class="asset-quantity">0 BTC</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section-header">
+            <span>История</span>
+            <span class="see-all">Все →</span>
+        </div>
+
+        <div class="transactions-list">
+            <div class="transaction-item">
+                <div class="tx-icon received">↓</div>
+                <div class="tx-info">
+                    <div class="tx-type">Получено</div>
+                    <div class="tx-date">Сегодня, 14:32</div>
+                </div>
+                <div class="tx-amount positive">+1,000 USDT</div>
+            </div>
+        </div>
+
+        <div class="bottom-nav">
+            <div class="nav-item active">
+                <div class="nav-icon">👛</div>
+                <span>Кошелёк</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">📊</div>
+                <span>Рынок</span>
+            </div>
+            <div class="nav-item">
+                <div class="nav-icon">🕐</div>
+                <span>История</span>
+            </div>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

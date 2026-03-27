@@ -1,0 +1,280 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+}
+
+body {
+    background: linear-gradient(180deg, #1a1a2e 0%, #16213e 100%);
+    min-height: 100vh;
+    color: #fff;
+    overflow-x: hidden;
+}
+
+.wallet-container {
+    max-width: 100%;
+    padding: 0 16px;
+    padding-bottom: 80px;
+}
+
+.header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 16px 0;
+}
+
+.wallet-title {
+    font-size: 28px;
+    font-weight: 700;
+}
+
+.header-icon {
+    font-size: 24px;
+    opacity: 0.7;
+}
+
+.balance-card {
+    background: linear-gradient(135deg, #2d2d44 0%, #1f1f2e 100%);
+    border-radius: 20px;
+    padding: 24px;
+    margin: 16px 0;
+    text-align: center;
+}
+
+.balance-label {
+    color: #888;
+    font-size: 14px;
+    margin-bottom: 8px;
+}
+
+.balance-amount {
+    display: flex;
+    justify-content: center;
+    align-items: baseline;
+    gap: 4px;
+}
+
+.currency {
+    font-size: 32px;
+    font-weight: 300;
+    color: #888;
+}
+
+.amount {
+    font-size: 48px;
+    font-weight: 700;
+}
+
+.balance-change {
+    margin-top: 8px;
+    font-size: 14px;
+}
+
+.balance-change.positive {
+    color: #4ade80;
+}
+
+.action-buttons {
+    display: flex;
+    justify-content: space-around;
+    margin: 24px 0;
+}
+
+.action-btn {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    cursor: pointer;
+}
+
+.action-icon {
+    width: 56px;
+    height: 56px;
+    background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+}
+
+.action-btn span {
+    font-size: 12px;
+    color: #888;
+}
+
+.section-header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin: 24px 0 12px;
+}
+
+.section-header span:first-child {
+    font-size: 18px;
+    font-weight: 600;
+}
+
+.see-all {
+    color: #3b82f6;
+    font-size: 14px;
+}
+
+.assets-list {
+    background: #1f1f2e;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.asset-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+    border-bottom: 1px solid #2a2a3e;
+}
+
+.asset-item:last-child {
+    border-bottom: none;
+}
+
+.asset-icon {
+    width: 44px;
+    height: 44px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    font-weight: bold;
+    margin-right: 12px;
+}
+
+.asset-icon.usdt {
+    background: linear-gradient(135deg, #26a17b 0%, #1a7a5c 100%);
+}
+
+.asset-icon.ton {
+    background: linear-gradient(135deg, #0088cc 0%, #005f8f 100%);
+}
+
+.asset-icon.btc {
+    background: linear-gradient(135deg, #f7931a 0%, #c77610 100%);
+}
+
+.asset-info {
+    flex: 1;
+}
+
+.asset-name {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.asset-ticker {
+    color: #888;
+    font-size: 13px;
+}
+
+.asset-value {
+    text-align: right;
+}
+
+.asset-amount {
+    font-weight: 600;
+    font-size: 16px;
+}
+
+.asset-quantity {
+    color: #888;
+    font-size: 13px;
+}
+
+.transactions-list {
+    background: #1f1f2e;
+    border-radius: 16px;
+    overflow: hidden;
+}
+
+.transaction-item {
+    display: flex;
+    align-items: center;
+    padding: 16px;
+}
+
+.tx-icon {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-right: 12px;
+    font-size: 18px;
+}
+
+.tx-icon.received {
+    background: rgba(74, 222, 128, 0.2);
+    color: #4ade80;
+}
+
+.tx-info {
+    flex: 1;
+}
+
+.tx-type {
+    font-weight: 500;
+}
+
+.tx-date {
+    color: #888;
+    font-size: 13px;
+}
+
+.tx-amount {
+    font-weight: 600;
+}
+
+.tx-amount.positive {
+    color: #4ade80;
+}
+
+.bottom-nav {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: #1a1a2e;
+    display: flex;
+    justify-content: space-around;
+    padding: 12px 0;
+    border-top: 1px solid #2a2a3e;
+}
+
+.nav-item {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 4px;
+    color: #666;
+    font-size: 11px;
+}
+
+.nav-item.active {
+    color: #3b82f6;
+}
+
+.nav-icon {
+    font-size: 24px;
+}
+
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+.balance-amount {
+    animation: pulse 3s infinite;
+}
