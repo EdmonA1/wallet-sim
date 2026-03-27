@@ -2,131 +2,502 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Wallet</title>
-    <link rel="stylesheet" href="style.css">
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
+    <style>
+        :root {
+            --bg-color: #000000;
+            --card-bg: #1c1c1e;
+            --text-primary: #ffffff;
+            --text-secondary: #8e8e93;
+            --accent-purple: #8A6BF5;
+            --accent-purple-bg: rgba(138, 107, 245, 0.15);
+            --nav-bg: rgba(20, 20, 20, 0.96);
+            --safe-top: env(safe-area-inset-top);
+            --safe-bottom: env(safe-area-inset-bottom);
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, SF Pro Text, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            color: var(--text-primary);
+            padding-top: var(--safe-top);
+            padding-bottom: calc(90px + var(--safe-bottom));
+            overflow-x: hidden;
+            user-select: none;
+            -webkit-user-select: none;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 8px 16px;
+            height: 50px;
+        }
+
+        .avatar-wrap {
+            width: 32px;
+            height: 32px;
+            border-radius: 50%;
+            overflow: hidden;
+            background: #333;
+        }
+
+        .avatar-wrap img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .header-title {
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .verify-icon {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-purple);
+        }
+
+        .header-right {
+            display: flex;
+            gap: 16px;
+            color: white;
+        }
+
+        .icon-btn svg {
+            width: 24px;
+            height: 24px;
+            fill: white;
+        }
+
+        .tabs-wrapper {
+            display: flex;
+            justify-content: center;
+            margin-top: 10px;
+            margin-bottom: 20px;
+        }
+
+        .segmented-control {
+            background-color: #1C1C1E;
+            border-radius: 20px;
+            padding: 3px;
+            display: flex;
+        }
+
+        .tab {
+            padding: 6px 24px;
+            border-radius: 18px;
+            font-size: 14px;
+            font-weight: 600;
+            color: #8E8E93;
+        }
+
+        .tab.active {
+            background-color: #3A3A3C;
+            color: white;
+        }
+
+        .balance-container {
+            text-align: center;
+            padding: 10px 0 30px 0;
+        }
+
+        .balance-label {
+            color: #8E8E93;
+            font-size: 14px;
+            margin-bottom: 6px;
+        }
+
+        .balance-value {
+            font-size: 46px;
+            font-weight: 700;
+            letter-spacing: -1px;
+            line-height: 1;
+        }
+
+        .currency-symbol {
+            font-size: 28px;
+            color: #8E8E93;
+            vertical-align: top;
+            margin-left: 2px;
+            position: relative;
+            top: 4px;
+        }
+
+        .balance-sub {
+            margin-top: 8px;
+            font-size: 14px;
+            color: #FF453A;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .sub-gray {
+            color: #8E8E93;
+        }
+
+        .actions {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            padding: 0 16px;
+            margin-bottom: 24px;
+        }
+
+        .action-btn {
+            background-color: #1C1C1E;
+            border-radius: 14px;
+            aspect-ratio: 1;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .action-icon {
+            width: 28px;
+            height: 28px;
+            background-color: var(--accent-purple-bg);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .action-icon svg {
+            width: 16px;
+            height: 16px;
+            fill: var(--accent-purple);
+        }
+
+        .action-text {
+            font-size: 11px;
+            font-weight: 500;
+            color: white;
+        }
+
+        .banner {
+            margin: 0 16px 24px 16px;
+            background: linear-gradient(90deg, #FF9F0A, #FFD60A);
+            border-radius: 14px;
+            padding: 16px;
+            position: relative;
+            height: 80px;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+        }
+
+        .banner-content {
+            width: 75%;
+            z-index: 2;
+        }
+
+        .banner-title {
+            font-weight: 700;
+            font-size: 15px;
+            line-height: 1.2;
+            margin-bottom: 4px;
+        }
+
+        .banner-link {
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .banner-close {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            opacity: 0.7;
+        }
+
+        .banner-img {
+            position: absolute;
+            right: -10px;
+            bottom: -10px;
+            width: 80px;
+            height: 80px;
+            background: rgba(255,255,255,0.2);
+            border-radius: 50%;
+        }
+
+        .assets-list {
+            padding: 0 16px;
+        }
+
+        .asset-item {
+            background-color: #1C1C1E;
+            border-radius: 16px;
+            padding: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        .asset-left {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .token-icon {
+            width: 42px;
+            height: 42px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            font-size: 20px;
+            color: white;
+        }
+
+        .bg-green { background: #2DA562; }
+        .bg-blue { background: #007AFF; }
+
+        .token-name { font-size: 16px; font-weight: 600; }
+        .token-sub { font-size: 13px; color: #8E8E93; margin-top: 2px; }
+
+        .asset-right { text-align: right; }
+        .asset-amount { font-size: 16px; font-weight: 600; }
+        .asset-price { font-size: 13px; color: #8E8E93; margin-top: 2px; }
+        .red { color: #FF453A; }
+
+        .section-title {
+            padding: 10px 20px 5px 20px;
+            font-size: 13px;
+            color: #8E8E93;
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--nav-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid rgba(255,255,255,0.1);
+            padding-bottom: var(--safe-bottom);
+            height: calc(60px + var(--safe-bottom));
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            align-items: start;
+            padding-top: 8px;
+            z-index: 100;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 4px;
+            color: #8E8E93;
+            cursor: pointer;
+        }
+
+        .nav-icon {
+            height: 28px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .nav-icon svg {
+            width: 24px;
+            height: 24px;
+            fill: #8E8E93;
+        }
+
+        .nav-label {
+            font-size: 10px;
+            font-weight: 500;
+        }
+
+        .nav-item.active .nav-label {
+            color: var(--accent-purple);
+        }
+
+        .nav-item.active .nav-icon {
+            width: 48px;
+            background-color: rgba(138, 107, 245, 0.2);
+            border-radius: 20px;
+        }
+
+        .nav-item.active svg {
+            fill: var(--accent-purple);
+        }
+
+    </style>
 </head>
 <body>
-    <div class="wallet-container">
-        <div class="header">
-            <div class="header-left">
-                <span class="wallet-title">Wallet</span>
-            </div>
-            <div class="header-right">
-                <div class="header-icon">⚙️</div>
-            </div>
+
+    <div class="header">
+        <div class="avatar-wrap">
+            <img src="https://i.pravatar.cc/150?img=11" alt="Avatar">
         </div>
-
-        <div class="balance-card">
-            <div class="balance-label">Общий баланс</div>
-            <div class="balance-amount">
-                <span class="currency">$</span>
-                <span class="amount" id="totalBalance">1,000.00</span>
-            </div>
-            <div class="balance-change positive">+$12.34 (1.25%) ↑</div>
+        <div class="header-title">
+            Кошелёк
+            <svg class="verify-icon" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg>
         </div>
-
-        <div class="action-buttons">
-            <div class="action-btn">
-                <div class="action-icon">↑</div>
-                <span>Отправить</span>
+        <div class="header-right">
+            <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
             </div>
-            <div class="action-btn">
-                <div class="action-icon">↓</div>
-                <span>Получить</span>
-            </div>
-            <div class="action-btn">
-                <div class="action-icon">💳</div>
-                <span>Купить</span>
-            </div>
-            <div class="action-btn">
-                <div class="action-icon">🔄</div>
-                <span>Обмен</span>
-            </div>
-        </div>
-
-        <div class="section-header">
-            <span>Активы</span>
-            <span class="see-all">Все →</span>
-        </div>
-
-        <div class="assets-list">
-            <div class="asset-item">
-                <div class="asset-icon usdt">
-                    <span>₮</span>
-                </div>
-                <div class="asset-info">
-                    <div class="asset-name">Tether</div>
-                    <div class="asset-ticker">USDT</div>
-                </div>
-                <div class="asset-value">
-                    <div class="asset-amount">$1,000.00</div>
-                    <div class="asset-quantity">1,000 USDT</div>
-                </div>
-            </div>
-
-            <div class="asset-item">
-                <div class="asset-icon ton">
-                    <span>💎</span>
-                </div>
-                <div class="asset-info">
-                    <div class="asset-name">Toncoin</div>
-                    <div class="asset-ticker">TON</div>
-                </div>
-                <div class="asset-value">
-                    <div class="asset-amount">$0.00</div>
-                    <div class="asset-quantity">0 TON</div>
-                </div>
-            </div>
-
-            <div class="asset-item">
-                <div class="asset-icon btc">
-                    <span>₿</span>
-                </div>
-                <div class="asset-info">
-                    <div class="asset-name">Bitcoin</div>
-                    <div class="asset-ticker">BTC</div>
-                </div>
-                <div class="asset-value">
-                    <div class="asset-amount">$0.00</div>
-                    <div class="asset-quantity">0 BTC</div>
-                </div>
-            </div>
-        </div>
-
-        <div class="section-header">
-            <span>История</span>
-            <span class="see-all">Все →</span>
-        </div>
-
-        <div class="transactions-list">
-            <div class="transaction-item">
-                <div class="tx-icon received">↓</div>
-                <div class="tx-info">
-                    <div class="tx-type">Получено</div>
-                    <div class="tx-date">Сегодня, 14:32</div>
-                </div>
-                <div class="tx-amount positive">+1,000 USDT</div>
-            </div>
-        </div>
-
-        <div class="bottom-nav">
-            <div class="nav-item active">
-                <div class="nav-icon">👛</div>
-                <span>Кошелёк</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">📊</div>
-                <span>Рынок</span>
-            </div>
-            <div class="nav-item">
-                <div class="nav-icon">🕐</div>
-                <span>История</span>
+            <div class="icon-btn">
+                <svg viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
             </div>
         </div>
     </div>
 
-    <script src="app.js"></script>
+    <div class="tabs-wrapper">
+        <div class="segmented-control">
+            <div class="tab active">Крипто</div>
+            <div class="tab">TON</div>
+        </div>
+    </div>
+
+    <div class="balance-container">
+        <div class="balance-label">Баланс</div>
+        <div class="balance-value">
+            1 000,02 <span class="currency-symbol">$</span>
+        </div>
+        <div class="balance-sub">
+            <span>&lt;0,01 $</span>
+            <span>↓ 3,22%</span>
+            <span class="sub-gray">24 ч</span>
+        </div>
+    </div>
+
+    <div class="actions">
+        <div class="action-btn">
+            <div class="action-icon">
+                <svg viewBox="0 0 24 24" style="transform: rotate(-45deg); margin-left: -1px; margin-top: 2px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            </div>
+            <div class="action-text">Перевести</div>
+        </div>
+        <div class="action-btn">
+            <div class="action-icon">
+                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            </div>
+            <div class="action-text">Пополнить</div>
+        </div>
+        <div class="action-btn">
+            <div class="action-icon">
+                <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+            </div>
+            <div class="action-text">Вывести</div>
+        </div>
+        <div class="action-btn">
+            <div class="action-icon">
+                <svg viewBox="0 0 24 24"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>
+            </div>
+            <div class="action-text">Обменять</div>
+        </div>
+    </div>
+
+    <div class="banner">
+        <div class="banner-close">×</div>
+        <div class="banner-content">
+            <div class="banner-title">Зарабатывайте до 25% годовых на ADI</div>
+            <div class="banner-link">Начать зарабатывать ›</div>
+        </div>
+        <div class="banner-img"></div>
+    </div>
+
+    <div class="assets-list">
+        <div class="asset-item">
+            <div class="asset-left">
+                <div class="token-icon bg-green">
+                    <svg style="width:24px;height:24px;fill:white" viewBox="0 0 24 24"><path d="M5 4h14v2h-6v14h-2V6H5V4z"/></svg>
+                </div>
+                <div>
+                    <div class="token-name">Доллары</div>
+                    <div class="token-sub">USDT</div>
+                </div>
+            </div>
+            <div class="asset-right">
+                <div class="asset-amount">1 000,00 $</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="section-title">
+        <span>Крипто</span>
+        <span>Всего: 0,02 $</span>
+    </div>
+
+    <div class="assets-list">
+        <div class="asset-item">
+            <div class="asset-left">
+                <div class="token-icon bg-blue">
+                    <svg style="width:20px;height:20px;fill:white" viewBox="0 0 24 24"><path d="M12,2L4.5,7.6L12,22L19.5,7.6L12,2Z"/></svg>
+                </div>
+                <div>
+                    <div class="token-name">Toncoin</div>
+                    <div class="token-sub">TON · 5,24 $</div>
+                </div>
+            </div>
+            <div class="asset-right">
+                <div class="asset-amount">0,02 $</div>
+                <div class="asset-price red">&lt;0,01 $</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="bottom-nav">
+        <div class="nav-item active">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
+            </div>
+            <div class="nav-label">Кошелёк</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
+            </div>
+            <div class="nav-label">Торговля</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
+            </div>
+            <div class="nav-label">Доход</div>
+        </div>
+        <div class="nav-item">
+            <div class="nav-icon">
+                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
+            </div>
+            <div class="nav-label">История</div>
+        </div>
+    </div>
+
+    <script>
+        const tg = window.Telegram.WebApp;
+        tg.expand();
+        tg.setHeaderColor('#000000');
+        tg.setBackgroundColor('#000000');
+    </script>
 </body>
 </html>
