@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="ru">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
@@ -7,160 +7,88 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         :root {
-            --bg-color: #000000;
-            --card-bg: #1C1C1E;
-            --text-primary: #FFFFFF;
-            --text-secondary: #8E8E93;
-            --accent-purple: #9F83FF;
-            --accent-purple-dim: rgba(159, 131, 255, 0.15);
-            --nav-bg: rgba(20, 20, 20, 0.85);
-            --safe-top: env(safe-area-inset-top);
-            --safe-bottom: env(safe-area-inset-bottom);
+            --bg-color: var(--tg-theme-secondary-bg-color, #f2f2f7);
+            --section-bg-color: var(--tg-theme-bg-color, #ffffff);
+            --text-color: var(--tg-theme-text-color, #000000);
+            --hint-color: var(--tg-theme-hint-color, #8e8e93);
+            --button-color: #007AFF; 
+            --button-text-color: #ffffff;
+            --separator-color: rgba(60, 60, 67, 0.29);
+            --tab-bg: rgba(255, 255, 255, 0.85);
+            --tab-active: #007AFF;
+            --tab-inactive: #999999;
+        }
+
+        @media (prefers-color-scheme: dark) {
+            :root {
+                --bg-color: var(--tg-theme-secondary-bg-color, #000000);
+                --section-bg-color: var(--tg-theme-bg-color, #1c1c1e);
+                --text-color: var(--tg-theme-text-color, #ffffff);
+                --hint-color: var(--tg-theme-hint-color, #ebebf599);
+                --separator-color: rgba(84, 84, 88, 0.65);
+                --tab-bg: rgba(30, 30, 30, 0.85);
+            }
         }
 
         * {
-            margin: 0;
-            padding: 0;
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
-            font-family: -apple-system, SF Pro Text, BlinkMacSystemFont, Helvetica, Arial, sans-serif;
         }
 
         body {
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-primary);
-            padding-top: calc(var(--safe-top) + 10px);
-            padding-bottom: calc(90px + var(--safe-bottom));
-            overflow-x: hidden;
+            color: var(--text-color);
+            margin: 0;
+            padding: 0;
+            padding-bottom: calc(80px + env(safe-area-inset-bottom));
             user-select: none;
             -webkit-user-select: none;
         }
 
         .header {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 0 16px;
-            height: 44px;
-            margin-bottom: 10px;
-        }
-
-        .header-left {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-        }
-
-        .avatar {
-            width: 32px;
-            height: 32px;
-            border-radius: 50%;
-            background: #333;
-            overflow: hidden;
-        }
-        
-        .avatar img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-
-        .title-wrap {
-            display: flex;
-            align-items: center;
-            gap: 4px;
+            justify-content: center;
+            padding: calc(16px + env(safe-area-inset-top)) 16px 16px 16px;
             font-size: 17px;
             font-weight: 600;
             letter-spacing: -0.4px;
+            background-color: var(--bg-color);
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .header svg {
+            width: 20px;
+            height: 20px;
+            margin-right: 6px;
         }
 
-        .verified {
-            width: 16px;
-            height: 16px;
-            fill: var(--accent-purple);
-        }
-
-        .header-right {
-            display: flex;
-            gap: 20px;
-        }
-
-        .h-icon svg {
-            width: 24px;
-            height: 24px;
-            fill: white;
-        }
-
-        .tabs-container {
-            display: flex;
-            justify-content: center;
-            margin-bottom: 30px;
-        }
-
-        .segmented-control {
-            background-color: #1C1C1E;
-            border-radius: 20px;
-            padding: 2px;
-            display: flex;
-        }
-
-        .tab {
-            padding: 6px 28px;
-            border-radius: 18px;
-            font-size: 13px;
-            font-weight: 600;
-            color: #8E8E93;
-            transition: 0.2s;
-        }
-
-        .tab.active {
-            background-color: #3A3A3C;
-            color: white;
-        }
-
-        .balance-section {
+        .balance-container {
             text-align: center;
-            margin-bottom: 35px;
+            padding: 24px 16px;
         }
 
-        .balance-label {
-            color: #8E8E93;
-            font-size: 13px;
-            margin-bottom: 8px;
-        }
-
-        .balance-val {
-            font-size: 44px;
+        .balance-amount {
+            font-size: 40px;
             font-weight: 700;
-            letter-spacing: -0.5px;
-            display: inline-flex;
-            align-items: flex-start;
+            letter-spacing: 0.5px;
+            margin-bottom: 4px;
         }
 
-        .currency {
-            font-size: 26px;
-            color: #8E8E93;
-            margin-left: 4px;
-            margin-top: 6px;
+        .balance-subtitle {
+            font-size: 15px;
+            color: var(--hint-color);
+            font-weight: 400;
         }
 
-        .balance-diff {
-            margin-top: 8px;
-            font-size: 13px;
+        .actions-row {
             display: flex;
             justify-content: center;
-            gap: 8px;
-        }
-
-        .diff-red { color: #FF453A; }
-        .diff-time { color: #636366; }
-
-        .actions-grid {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 12px;
-            padding: 0 16px;
-            margin-bottom: 24px;
+            gap: 28px;
+            margin-bottom: 32px;
         }
 
         .action-item {
@@ -171,350 +99,250 @@
             cursor: pointer;
         }
 
-        .btn-sq {
-            width: 100%;
-            aspect-ratio: 1;
-            background-color: #1C1C1E;
-            border-radius: 14px;
+        .action-button {
+            width: 52px;
+            height: 52px;
+            background-color: var(--button-color);
+            border-radius: 50%;
             display: flex;
-            align-items: center;
             justify-content: center;
+            align-items: center;
+            color: var(--button-text-color);
+            box-shadow: 0 4px 12px rgba(0, 122, 255, 0.3);
         }
 
-        .btn-sq svg {
+        .action-button svg {
             width: 24px;
             height: 24px;
-            fill: var(--accent-purple);
+            fill: none;
+            stroke: currentColor;
+            stroke-width: 2.2;
+            stroke-linecap: round;
+            stroke-linejoin: round;
         }
 
-        .action-text {
-            font-size: 11px;
+        .action-item span {
+            font-size: 13px;
             font-weight: 500;
-            color: var(--accent-purple);
+            color: var(--button-color);
         }
 
-        .banner {
-            margin: 0 16px 24px 16px;
-            background: linear-gradient(92deg, #FF9F0A 0%, #FFD60A 100%);
-            border-radius: 14px;
-            height: 84px;
-            position: relative;
-            overflow: hidden;
-            display: flex;
-            align-items: center;
-            padding: 0 16px;
-        }
-
-        .banner-info {
-            width: 70%;
-            z-index: 2;
-        }
-
-        .b-title {
-            font-size: 15px;
-            font-weight: 700;
-            line-height: 1.25;
-            color: white;
-            margin-bottom: 4px;
-            text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-        }
-        
-        .b-link {
-            font-size: 12px;
-            color: rgba(255,255,255,0.9);
-        }
-
-        .b-close {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            font-size: 18px;
-            color: rgba(255,255,255,0.6);
-        }
-
-        .coin-art {
-            position: absolute;
-            right: -20px;
-            bottom: -20px;
-            width: 100px;
-            height: 100px;
-            background: radial-gradient(circle, #4F8AFF 0%, #0A4FCC 100%);
-            border-radius: 50%;
-            border: 4px solid rgba(255,255,255,0.1);
-        }
-
-        .coin-inner {
-            width: 40px;
-            height: 40px;
-            position: absolute;
-            top: 30px;
-            left: 30px;
-            border: 2px solid rgba(255,255,255,0.5);
-            border-radius: 50%;
-        }
-
-        .asset-list {
+        .assets-card {
+            background-color: var(--section-bg-color);
+            border-radius: 16px;
+            margin: 0 16px;
             padding: 0 16px;
         }
 
         .asset-row {
             display: flex;
-            justify-content: space-between;
             align-items: center;
-            padding: 14px;
-            background-color: #1C1C1E;
-            border-radius: 16px;
-            margin-bottom: 10px;
+            justify-content: space-between;
+            padding: 14px 0;
+            border-bottom: 0.5px solid var(--separator-color);
         }
 
-        .a-left {
+        .asset-row:last-child {
+            border-bottom: none;
+        }
+
+        .asset-left {
             display: flex;
             align-items: center;
             gap: 12px;
         }
 
-        .a-icon {
-            width: 42px;
-            height: 42px;
+        .asset-icon {
+            width: 40px;
+            height: 40px;
             border-radius: 50%;
+            background-color: var(--bg-color);
+            object-fit: cover;
+        }
+
+        .asset-info {
             display: flex;
-            align-items: center;
-            justify-content: center;
-            font-size: 22px;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .asset-name {
+            font-size: 16px;
             font-weight: 600;
-            color: white;
+            letter-spacing: -0.2px;
         }
 
-        .bg-g { background: #2DA562; }
-        .bg-b { background: #007AFF; }
-        
-        .a-name { font-size: 16px; font-weight: 600; }
-        .a-sub { font-size: 13px; color: #8E8E93; margin-top: 2px; }
-
-        .a-right { text-align: right; }
-        .a-val { font-size: 16px; font-weight: 600; }
-        .a-price { font-size: 13px; color: #FF453A; margin-top: 2px; }
-
-        .section-h {
-            display: flex;
-            justify-content: space-between;
-            padding: 10px 20px 6px 20px;
+        .asset-badge {
             font-size: 13px;
-            color: #8E8E93;
+            color: var(--hint-color);
         }
 
-        .bottom-bar {
+        .asset-right {
+            text-align: right;
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .asset-balance {
+            font-size: 16px;
+            font-weight: 600;
+            letter-spacing: -0.2px;
+        }
+
+        .asset-fiat {
+            font-size: 13px;
+            color: var(--hint-color);
+        }
+
+        .tab-bar {
             position: fixed;
             bottom: 0;
             left: 0;
-            width: 100%;
-            background: rgba(28, 28, 30, 0.92);
-            backdrop-filter: blur(40px);
-            -webkit-backdrop-filter: blur(40px);
-            border-top: 0.5px solid rgba(255,255,255,0.1);
-            padding-bottom: var(--safe-bottom);
-            padding-top: 6px;
-            height: calc(56px + var(--safe-bottom));
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            z-index: 999;
+            right: 0;
+            height: calc(56px + env(safe-area-inset-bottom));
+            background: var(--tab-bg);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-top: 0.5px solid var(--separator-color);
+            display: flex;
+            justify-content: space-around;
+            padding-bottom: env(safe-area-inset-bottom);
+            z-index: 100;
         }
 
-        .nav-btn {
+        .tab-item {
             display: flex;
             flex-direction: column;
             align-items: center;
-            gap: 4px;
-            cursor: pointer;
-            color: #8E8E93;
-        }
-
-        .nav-icon-box {
-            height: 30px;
-            display: flex;
-            align-items: center;
             justify-content: center;
-            width: 54px;
-            border-radius: 16px;
-            transition: 0.2s;
+            width: 25%;
+            padding-top: 6px;
+            color: var(--tab-inactive);
         }
 
-        .nav-btn svg {
+        .tab-item.active {
+            color: var(--tab-active);
+        }
+
+        .tab-item svg {
             width: 24px;
             height: 24px;
-            fill: #8E8E93;
+            margin-bottom: 2px;
+            fill: currentColor;
         }
 
-        .nav-lbl {
+        .tab-item span {
             font-size: 10px;
             font-weight: 500;
         }
-
-        .nav-btn.active .nav-icon-box {
-            background-color: rgba(159, 131, 255, 0.2);
-        }
-
-        .nav-btn.active svg {
-            fill: var(--accent-purple);
-        }
-
-        .nav-btn.active .nav-lbl {
-            color: var(--accent-purple);
-        }
-
     </style>
 </head>
 <body>
 
     <div class="header">
-        <div class="header-left">
-            <div class="avatar">
-                <img src="https://i.pravatar.cc/150?img=68" alt="User">
-            </div>
-            <div class="title-wrap">
-                Кошелёк
-                <svg class="verified" viewBox="0 0 24 24"><path d="M23,12L20.56,9.22L20.9,5.54L17.29,4.72L15.4,1.54L12,3L8.6,1.54L6.71,4.72L3.1,5.53L3.44,9.21L1,12L3.44,14.78L3.1,18.47L6.71,19.29L8.6,22.47L12,21L15.4,22.46L17.29,19.28L20.9,18.46L20.56,14.78L23,12M10,17L6,13L7.41,11.59L10,14.17L16.59,7.58L18,9L10,17Z"/></svg>
-            </div>
-        </div>
-        <div class="header-right">
-            <div class="h-icon">
-                <svg viewBox="0 0 24 24"><path d="M6 10c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm12 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2zm-6 0c-1.1 0-2 .9-2 2s.9 2 2 2 2-.9 2-2-.9-2-2-2z"/></svg>
-            </div>
-            <div class="h-icon">
-                <svg viewBox="0 0 24 24"><path d="M3 5v4h2V5h4V3H5c-1.1 0-2 .9-2 2zm2 10H3v4c0 1.1.9 2 2 2h4v-2H5v-4zm14 4h-4v2h4c1.1 0 2-.9 2-2v-4h-2v4zm0-16h-4v2h4v4h2V5c0-1.1-.9-2-2-2z"/></svg>
-            </div>
-        </div>
+        <svg viewBox="0 0 24 24" fill="var(--button-color)"><path d="M19 7h-1V6a3 3 0 0 0-3-3H5a3 3 0 0 0-3 3v12a3 3 0 0 0 3 3h14a3 3 0 0 0 3-3v-8a3 3 0 0 0-3-3zm-1 9h-2a1 1 0 1 1 0-2h2v2z"/></svg>
+        Wallet
     </div>
 
-    <div class="tabs-container">
-        <div class="segmented-control">
-            <div class="tab active">Крипто</div>
-            <div class="tab">TON</div>
-        </div>
+    <div class="balance-container">
+        <div class="balance-amount">$1,000.00</div>
+        <div class="balance-subtitle">~154.2 TON</div>
     </div>
 
-    <div class="balance-section">
-        <div class="balance-label">Баланс</div>
-        <div class="balance-val">
-            1 000,02 <span class="currency">$</span>
-        </div>
-        <div class="balance-diff">
-            <span class="diff-red">&lt;0,01 $</span>
-            <span class="diff-red">↓ 3,16%</span>
-            <span class="diff-time">24 ч</span>
-        </div>
-    </div>
-
-    <div class="actions-grid">
+    <div class="actions-row">
         <div class="action-item">
-            <div class="btn-sq">
-                <svg viewBox="0 0 24 24" style="transform: rotate(-45deg); margin-left:-2px; margin-top:2px;"><path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z"/></svg>
+            <div class="action-button">
+                <svg viewBox="0 0 24 24"><path d="M5 12h14M12 5l7 7-7 7" stroke-width="2.5"/></svg>
             </div>
-            <span class="action-text">Перевести</span>
+            <span>Send</span>
         </div>
         <div class="action-item">
-            <div class="btn-sq">
-                <svg viewBox="0 0 24 24"><path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/></svg>
+            <div class="action-button">
+                <svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14" stroke-width="2.5"/></svg>
             </div>
-            <span class="action-text">Пополнить</span>
+            <span>Add</span>
         </div>
         <div class="action-item">
-            <div class="btn-sq">
-                <svg viewBox="0 0 24 24"><path d="M4 12l1.41 1.41L11 7.83V20h2V7.83l5.58 5.59L20 12l-8-8-8 8z"/></svg>
+            <div class="action-button">
+                <svg viewBox="0 0 24 24"><path d="M17 4v11m0 0l-4-4m4 4l4-4M7 20V9m0 0l4 4m-4-4l-4 4" stroke-width="2.5"/></svg>
             </div>
-            <span class="action-text">Вывести</span>
-        </div>
-        <div class="action-item">
-            <div class="btn-sq">
-                <svg viewBox="0 0 24 24"><path d="M6.99 11L3 15l3.99 4v-3H14v-2H6.99v-3zM21 9l-3.99-4v3H10v2h7.01v3L21 9z"/></svg>
-            </div>
-            <span class="action-text">Обменять</span>
+            <span>Exchange</span>
         </div>
     </div>
 
-    <div class="banner">
-        <div class="b-close">×</div>
-        <div class="banner-info">
-            <div class="b-title">Зарабатывайте до 25% годовых на ADI</div>
-            <div class="b-link">Начать зарабатывать ›</div>
-        </div>
-        <div class="coin-art">
-            <div class="coin-inner"></div>
-        </div>
-    </div>
-
-    <div class="asset-list">
+    <div class="assets-card">
         <div class="asset-row">
-            <div class="a-left">
-                <div class="a-icon bg-g">
-                    <svg style="width:24px;height:24px;fill:white" viewBox="0 0 24 24"><path d="M5 4h14v2h-6v14h-2V6H5V4z"/></svg>
-                </div>
-                <div>
-                    <div class="a-name">Доллары</div>
-                    <div class="a-sub">USDT</div>
+            <div class="asset-left">
+                <img src="https://cryptologos.cc/logos/toncoin-ton-logo.svg?v=035" class="asset-icon" alt="TON">
+                <div class="asset-info">
+                    <span class="asset-name">TON Space</span>
+                    <span class="asset-badge">Beta</span>
                 </div>
             </div>
-            <div class="a-right">
-                <div class="a-val">1 000,00 $</div>
+            <div class="asset-right">
+                <span class="asset-balance">150.00 TON</span>
+                <span class="asset-fiat">$972.50</span>
             </div>
         </div>
-    </div>
-
-    <div class="section-h">
-        <span>Крипто</span>
-        <span>Всего: 0,02 $</span>
-    </div>
-
-    <div class="asset-list">
         <div class="asset-row">
-            <div class="a-left">
-                <div class="a-icon bg-b">
-                    <svg style="width:20px;height:20px;fill:white" viewBox="0 0 24 24"><path d="M12,2L4.5,7.6L12,22L19.5,7.6L12,2Z"/></svg>
-                </div>
-                <div>
-                    <div class="a-name">Toncoin</div>
-                    <div class="a-sub">TON · 5,24 $</div>
+            <div class="asset-left">
+                <img src="https://cryptologos.cc/logos/tether-usdt-logo.svg?v=035" class="asset-icon" alt="USDT">
+                <div class="asset-info">
+                    <span class="asset-name">Tether</span>
+                    <span class="asset-badge">USDT</span>
                 </div>
             </div>
-            <div class="a-right">
-                <div class="a-val">0,02 $</div>
-                <div class="a-price">&lt;0,01 $</div>
+            <div class="asset-right">
+                <span class="asset-balance">25.00 USDT</span>
+                <span class="asset-fiat">$25.00</span>
+            </div>
+        </div>
+        <!-- Bitcoin -->
+        <div class="asset-row">
+            <div class="asset-left">
+                <img src="https://cryptologos.cc/logos/bitcoin-btc-logo.svg?v=035" class="asset-icon" alt="BTC">
+                <div class="asset-info">
+                    <span class="asset-name">Bitcoin</span>
+                    <span class="asset-badge">BTC</span>
+                </div>
+            </div>
+            <div class="asset-right">
+                <span class="asset-balance">0.000038 BTC</span>
+                <span class="asset-fiat">$2.50</span>
             </div>
         </div>
     </div>
 
-    <div class="bottom-bar">
-        <div class="nav-btn active">
-            <div class="nav-icon-box">
-                <svg viewBox="0 0 24 24"><path d="M21 18v1c0 1.1-.9 2-2 2H5c-1.11 0-2-.9-2-2V5c0-1.1.89-2 2-2h14c1.1 0 2 .9 2 2v1h-9c-1.11 0-2 .9-2 2v8c0 1.1.89 2 2 2h9zm-9-2h10V8H12v8zm4-2.5c-.83 0-1.5-.67-1.5-1.5s.67-1.5 1.5-1.5 1.5.67 1.5 1.5-.67 1.5-1.5 1.5z"/></svg>
-            </div>
-            <span class="nav-lbl">Кошелёк</span>
+    <div class="tab-bar">
+        <div class="tab-item active">
+            <svg viewBox="0 0 24 24"><path d="M21 7.5H3a1.5 1.5 0 0 0-1.5 1.5v9A1.5 1.5 0 0 0 3 19.5h18a1.5 1.5 0 0 0 1.5-1.5V9a1.5 1.5 0 0 0-1.5-1.5zm-3.5 6a1.5 1.5 0 1 1 0-3 1.5 1.5 0 0 1 0 3zM20 4.5H4a1 1 0 0 1 0-2h16a1 1 0 0 1 0 2z"/></svg>
+            <span>Wallet</span>
         </div>
-        <div class="nav-btn">
-            <div class="nav-icon-box">
-                <svg viewBox="0 0 24 24"><path d="M3.5 18.49l6-6.01 4 4L22 6.92l-1.41-1.41-7.09 7.97-4-4L2 16.99z"/></svg>
-            </div>
-            <span class="nav-lbl">Торговля</span>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24"><path d="M4 4h6v6H4zm10 0h6v6h-6zM4 14h6v6H4zm10 0h6v6h-6z"/></svg>
+            <span>Assets</span>
         </div>
-        <div class="nav-btn">
-            <div class="nav-icon-box">
-                <svg viewBox="0 0 24 24"><path d="M11.8 10.9c-2.27-.59-3-1.2-3-2.15 0-1.09 1.01-1.85 2.7-1.85 1.78 0 2.44.85 2.5 2.1h2.21c-.07-1.72-1.12-3.3-3.21-3.81V3h-3v2.16c-1.94.42-3.5 1.68-3.5 3.61 0 2.31 1.91 3.46 4.7 4.13 2.5.6 3 1.48 3 2.41 0 .69-.49 1.79-2.7 1.79-2.06 0-2.87-.92-2.98-2.1h-2.2c.12 2.19 1.76 3.42 3.68 3.83V21h3v-2.15c1.95-.37 3.5-1.5 3.5-3.55 0-2.84-2.43-3.81-4.7-4.4z"/></svg>
-            </div>
-            <span class="nav-lbl">Доход</span>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M16 3h5v5M4 20L21 3M21 16v5h-5M15 15l6 6M4 4l5 5"/></svg>
+            <span>Trade</span>
         </div>
-        <div class="nav-btn">
-            <div class="nav-icon-box">
-                <svg viewBox="0 0 24 24"><path d="M11.99 2C6.47 2 2 6.48 2 12s4.47 10 9.99 10C17.52 22 22 17.52 22 12S17.52 2 11.99 2zM12 20c-4.42 0-8-3.58-8-8s3.58-8 8-8 8 3.58 8 8-3.58 8-8 8zm.5-13H11v6l5.25 3.15.75-1.23-4.5-2.67z"/></svg>
-            </div>
-            <span class="nav-lbl">История</span>
+        <div class="tab-item">
+            <svg viewBox="0 0 24 24"><path d="M19.4 13c.08-.63.14-1.27.14-1.92 0-.66-.06-1.3-.15-1.92l2.1-1.63a.5.5 0 0 0 .12-.64l-2-3.46a.5.5 0 0 0-.61-.22l-2.49 1a9.23 9.23 0 0 0-3.33-1.93l-.38-2.65A.5.5 0 0 0 12.31 0H8.3a.5.5 0 0 0-.49.43L7.42 3.1A9.12 9.12 0 0 0 4.1 5.02l-2.5-1a.5.5 0 0 0-.61.22l-2 3.46a.5.5 0 0 0 .12.64l2.11 1.64c-.09.62-.15 1.26-.15 1.92 0 .66.06 1.3.15 1.92l-2.11 1.64a.5.5 0 0 0-.12.64l2 3.46a.5.5 0 0 0 .61.22l2.49-1a9.2 9.2 0 0 0 3.33 1.93l.38 2.65a.5.5 0 0 0 .49.43h4.02a.5.5 0 0 0 .49-.43l.38-2.65a9.1 9.1 0 0 0 3.33-1.93l2.49 1a.5.5 0 0 0 .61-.22l2-3.46a.5.5 0 0 0-.12-.64l-2.1-1.64zM10.3 15.5a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9z"/></svg>
+            <span>Settings</span>
         </div>
     </div>
 
     <script>
-        const tg = window.Telegram.WebApp;
-        tg.expand();
-        tg.setHeaderColor('#000000');
-        tg.setBackgroundColor('#000000');
+        if (window.Telegram && window.Telegram.WebApp) {
+            window.Telegram.WebApp.expand();
+            window.Telegram.WebApp.ready();
+            
+            const tg = window.Telegram.WebApp;
+            if (tg.setHeaderColor) {
+                tg.setHeaderColor('secondary_bg_color');
+            }
+        }
     </script>
 </body>
 </html>
